@@ -26,8 +26,10 @@ export default function Home() {
   const [newCriteriaInput, setNewCriteriaInput] = useState<string>("");
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false);
   const [tempInput, setTempInput] = useState<{ [key: string]: string }>({});
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsMounted(true);
     setCurrentStep(1);
   }, [setCurrentStep]);
 
@@ -227,6 +229,10 @@ export default function Home() {
     }
   };
 
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
@@ -285,7 +291,7 @@ export default function Home() {
                 value={newCriteriaInput}
                 onChange={(e) => setNewCriteriaInput(e.target.value)}
                 placeholder="Nama kriteria baru"
-                className="flex-grow p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-grow p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
               />
               <button
                 onClick={addCriteria}

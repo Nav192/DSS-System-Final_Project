@@ -38,7 +38,7 @@ class AHPCalculateResponse(BaseModel):
 # Pydantic model for Restaurant data
 class RestaurantBase(BaseModel):
     name: str
-    harga: float
+    harga: int
     rasa: float
     kebersihan: float
     kenyamanan: float

@@ -46,8 +46,10 @@ export default function RestaurantsPage() {
   const [criteriaFields, setCriteriaFields] = useState<CriterionTypeData[]>(
     INITIAL_CRITERIA_FIELDS,
   );
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     setCurrentStep(2);
     const savedRestaurants = localStorage.getItem(RESTAURANT_STORAGE_KEY);
     if (savedRestaurants) {
@@ -68,7 +70,7 @@ export default function RestaurantsPage() {
         setCriteriaFields(INITIAL_CRITERIA_FIELDS);
       }
     }
-  }, [setCurrentStep]);
+  }, [setCurrentStep, setRestaurants]);
 
   const saveRestaurants = () => {
     localStorage.setItem(RESTAURANT_STORAGE_KEY, JSON.stringify(restaurants));
@@ -156,6 +158,10 @@ export default function RestaurantsPage() {
     );
   };
 
+  if (!isMounted) {
+    return null; // Atau bisa return loading spinner sederhana
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
@@ -204,7 +210,7 @@ export default function RestaurantsPage() {
                   )
                 </label>
                 <input
-                  type="text"
+                  type={field.key === "harga" ? "number" : "text"}
                   id={field.key}
                   name={field.key}
                   value={String(
@@ -214,15 +220,21 @@ export default function RestaurantsPage() {
                     const val = e.target.value.replace(",", ".");
                     setNewRestaurant((prev) => ({
                       ...prev,
-                      [field.key]: parseFloat(val) || 0,
+                      [field.key]: field.key === "harga" ? parseInt(val) || 0 : parseFloat(val) || 0,
                     }));
                   }}
                   required
-                  min="0"
-                  step="0.1"
+                  min={field.key === "harga" ? "1" : "0"}
+                  max={field.key === "harga" ? "5" : undefined}
+                  step={field.key === "harga" ? "1" : "0.1"}
                   className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-800"
-                  placeholder="Nilai (0-100)"
+                  placeholder={field.key === "harga" ? "Skala 1-5 (1:Murah, 5:Mahal)" : "Nilai (0-100)"}
                 />
+                {field.key === "harga" && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    1: 0-5rb, 2: 5-10rb, 3: 10-15rb, 4: 15-20rb, 5: 20-25rb
+                  </p>
+                )}
               </div>
             ))}
             <div className="md:col-span-2 flex justify-end space-x-3 mt-4">

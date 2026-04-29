@@ -24,8 +24,10 @@ export default function RankingPage() {
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     setCurrentStep(3);
   }, [setCurrentStep]);
 
@@ -118,6 +120,10 @@ export default function RankingPage() {
       alert("Data ranking berhasil direset!");
     }
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
