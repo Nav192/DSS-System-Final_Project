@@ -75,4 +75,3 @@ Frontend akan berjalan di `http://localhost:3000`.
 - `/frontend/components`: Komponen UI yang dapat digunakan kembali.
 
 ---
-Dikembangkan untuk membantu pengambilan keputusan yang lebih objektif dan akurat.
